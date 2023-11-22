@@ -123,7 +123,7 @@ function loadGltf(nameGltfGet) {
 function validarExt(){
     var  archivoInput = document.getElementById('archivoInput');
     var archivoruta= archivoInput.Value;
-    var extPermitidas = /(.gltf  j| .glb)$/i;
+    var extPermitidas = /(.glb|.GLB|.gltf|.GLTF)$/i;
     
     if(!extPermitidas.exec(archivoruta)){
     
@@ -138,7 +138,7 @@ function validarExt(){
             var visor= new FileReader();
             visor.onload= function (read){
     
-                document.getElementById('model').innerHTML = 
+                document.getElementById('visordeArchivo').innerHTML = 
                '<embed src="'+read.target.result+'" width= "500" height = "500" >'; 
             }
              visor.readAsDataURL(archivoInput.files[0]);
