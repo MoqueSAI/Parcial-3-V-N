@@ -121,6 +121,7 @@ function loadGltf(nameGltfGet) {
 }
 
 function validarExt(){
+
     var  archivoInput = document.getElementById('archivoInput');
     var archivoruta= archivoInput.Value;
     var extPermitidas = /(.glb|.GLB|.gltf|.GLTF)$/i;
@@ -140,6 +141,7 @@ function validarExt(){
     
                 document.getElementById('visordeArchivo').innerHTML = 
                '<embed src="'+read.target.result+'" width= "500" height = "500" >'; 
+               loadGltf.target.result;
             }
              visor.readAsDataURL(archivoInput.files[0]);
         }
