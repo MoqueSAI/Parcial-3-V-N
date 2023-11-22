@@ -1,6 +1,4 @@
 body {
-    background-image: url('/src/images/webvisualizer.png');
-    background-size: cover;
     background-position: center;
     display: flex;
     flex-direction: column;
@@ -29,6 +27,37 @@ body {
     font-family: "Arial Black";
 }
 
+.buttons {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    left: 80px;
+    top: 180px;
+    text-align: center;
+}
 
+* Estilo para el botón de input */
+input[type="file"] {
+  display: none; /* Oculta el input por defecto */
+}
 
+/* Estilo para el botón personalizado */
+.custom-file-upload {
+  border: 2px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: #744caf;
+  color: white;
+  border-radius: 30px;
+}
+
+/* Estilo para cambiar el color del texto en el botón personalizado cuando está sobre él */
+.custom-file-upload:hover {
+  background-color: rgb(126, 20, 231)
+}
+
+#archivoInput{
+    display: none;
+}
 

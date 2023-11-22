@@ -3,7 +3,8 @@
 var scene = null,
     camera = null,
     renderer = null,
-    controls = null;
+    controls = null,
+    nameGltfGet= null;
 
 const size = 20,
     divisions = 20;
@@ -12,9 +13,9 @@ const size = 20,
 function startScene() {
     // Scene, Camera, Renderer
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xE6E6FA); 
+    scene.background = new THREE.Color(0x7B5989); 
     camera = new THREE.PerspectiveCamera(
-        40,                                        //Angulo de visión(Abajo o arriba) 
+        75,                                        //Angulo de visión(Abajo o arriba) 
         window.innerWidth / window.innerHeight,    //Relación de aspecto 16:9
         0.1,                                       //Mas cerca (no renderiza)
         1000);                                    //Mas lejos ()
@@ -27,44 +28,53 @@ function startScene() {
     controls = new THREE.OrbitControls(camera, renderer.domElement);
       
     //camera.position.set(13, 7, 13);
-    camera.position.set(0, 4, 50 );
+    camera.position.set(20, 10, 20); // Ajusta la posición de la cámara
+    camera.lookAt(new THREE.Vector3(20, 10, 20)); // Ajusta el punto al que la cámara está mirando
     const rende = new THREE.WebGLRenderer();
     rende.shadowMap.enabled = true;
     rende.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-    //Se crea un punto de luz para generar sombra y luz
-    const light = new THREE.PointLight(0xffffff, 1, 100);
-    light.position.set(0, 5, 4);
-    light.castShadow = true; // default false
-    scene.add(light);
-
-    //Propiedades de las sombras
-    light.shadow.mapSize.width = 512; // default
-    light.shadow.mapSize.height = 512; // default
-    light.shadow.camera.near = 0.5; // default
-    light.shadow.camera.far = 500; // default
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 5);
+    directionalLight.position.set(5, 10, 5); // Ajusta la posición de la luz direccional
+    scene.add(directionalLight);
 
     const lightt = new THREE.AmbientLight(0x404040); // soft white light
     scene.add(lightt);
 
+    //Se crea un punto de luz para generar sombra y luz
+    const light = new THREE.PointLight(0xffffff, 1, 100);
+     light.position.set(10, 20, 10); // Ajusta la posición de la luz puntual
+     light.castShadow = true; // Habilita la generación de sombras
+     scene.add(light);
+
+
+    //Propiedades de las sombras
+
+    renderer.shadowMap.enabled = true;
+    
+
+    light.shadow.camera.near = 0.1; // Ajusta la distancia cercana de la cámara de sombras
+    light.shadow.camera.far = 100; // Ajusta la distancia lejana de la cámara de sombras
+
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 500;
+
+   
 
 
 const gridHelper = new THREE.GridHelper( size, divisions );
 scene.add( gridHelper );
    
     animate();
-
-    // Duck Model(prueba)
-    loadGltf('./src/models/gltf/Duck.gltf');
-
-   
-
 }
 
 //Animar la escena
 function animate() {
     requestAnimationFrame(animate);
-    // controls.update();
+    controls.update();
     renderer.render(scene, camera);
 
   
@@ -97,7 +107,8 @@ function loadGltf(nameGltfGet) {
             scene.add(gltf.scene);
 
             gltf.animations; // Array<THREE.AnimationClip>
-            gltf.scene; // THREE.Group
+            gltf.scene.position.set(0,1,0); // THREE.Group
+            gltf.scene.scale.set(10,10,10);
             gltf.scenes; // Array<THREE.Group>
             gltf.cameras; // Array<THREE.Camera>
             gltf.asset; // Object
@@ -122,30 +133,27 @@ function loadGltf(nameGltfGet) {
 
 function validarExt(){
 
-    var  archivoInput = document.getElementById('archivoInput');
-    var archivoruta= archivoInput.Value;
-    var extPermitidas = /(.glb|.GLB|.gltf|.GLTF)$/i;
-    
-    if(!extPermitidas.exec(archivoruta)){
-    
-        alert('Archivo no válido, por favor, solo ingrese archivo glb o gltf.');
-        archivoInput.Value='';
+    var archivoInput = document.getElementById('archivoInput');
+    var archivoRuta = archivoInput.value;
+    var extA= /(.gltf|.GLTF|.glb|.GLB|)$/i;
+
+    if(!extA.exec(archivoRuta)){
+        alert('Archivo inválido, por favor, introduzca un archivo glb')
+        archivoInput.value='';
         return false;
-    
-    } else{
-    
-        if(archivoInput.files && archivoInput.files[0]){
-           
-            var visor= new FileReader();
-            visor.onload= function (read){
-    
-                document.getElementById('visordeArchivo').innerHTML = 
-               '<embed src="'+read.target.result+'" width= "500" height = "500" >'; 
-               loadGltf(read.target.result);
-            }
-            URL.createObjectURL(archivoInput.files[0]);
-        }
+    }else{
+    if (archivoInput.files && archivoInput.files[0]) {
+        var visor = new FileReader();
+        visor.onload = function (arc) {
+            document.getElementById('visorArc').innerHTML = '<embed src="' + arc.target.result + '"width= "0" height= "0">';
+            nameGltfGet= arc.target.result;
+
+            loadGltf(nameGltfGet);
+            
+        };
+        visor.readAsDataURL(archivoInput.files[0]);
+        URL.createObjectURL(archivoInput.files[0]);
+       
     }
-    
-    
-    }
+    }    
+}
