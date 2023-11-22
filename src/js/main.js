@@ -141,7 +141,7 @@ function validarExt(){
     
                 document.getElementById('visordeArchivo').innerHTML = 
                '<embed src="'+read.target.result+'" width= "500" height = "500" >'; 
-               loadGltf.target.result;
+               loadGltf().read.target.result;
             }
              visor.readAsDataURL(archivoInput.files[0]);
         }
