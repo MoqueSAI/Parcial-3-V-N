@@ -141,9 +141,9 @@ function validarExt(){
     
                 document.getElementById('visordeArchivo').innerHTML = 
                '<embed src="'+read.target.result+'" width= "500" height = "500" >'; 
-               loadGltf().read.target.result;
+               loadGltf(read.target.result);
             }
-             visor.readAsDataURL(archivoInput.files[0]);
+            URL.createObjectURL(archivoInput.files[0]);
         }
     }
     
